@@ -116,10 +116,10 @@ window.STARTER_SONGS = [
 <script>
 (function(){
   if (window.firebase) return;
-  const KEY = 'liveRequestsDemoDB';
+  const KEY = 'liveRequestsDemoDB2';
   const now = Date.now();
   const seed = () => ({
-    settings: { actName: 'The Late Shift', venue: 'Waterline Brewing', tipLink: 'https://venmo.com/' },
+    settings: { actName: 'The Doorknobs', venue: 'Waterline Brewing', tipLink: 'https://venmo.com/' },
     songs: window.STARTER_SONGS.map(s => ({...s, active: true})).concat([{id:72,title:"Don't Stop Believin'",artist:'Journey',era:'80s',genre:'Rock',active:false}]),
     requests: {
       queue: {
@@ -462,7 +462,7 @@ select.field{appearance:none;-webkit-appearance:none;background-image:url("data:
     <div class="panel stack">
       <div>
         <label class="lbl" for="set-act">Act name</label>
-        <input class="field" id="set-act" placeholder="e.g. The Late Shift" maxlength="60">
+        <input class="field" id="set-act" placeholder="e.g. The Doorknobs" maxlength="60">
       </div>
       <div>
         <label class="lbl" for="set-venue">Where you're playing tonight</label>
