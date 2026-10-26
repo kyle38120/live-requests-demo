@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#15131F">
+<link rel="icon" href="../images/icon.png">
+<title>Live tonight</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+<script>window.__DEMO_USER = null;</script>
+<script>
+// ─────────────────────────────────────────────────────────────
+// Paste your Firebase web app config below.
+// Firebase console → Project settings → General → Your apps → Config.
+// These values are safe to publish: access is controlled by
+// database.rules.json, not by keeping this file secret.
+// ─────────────────────────────────────────────────────────────
+window.FIREBASE_CONFIG = {
+  apiKey: "demo",
+  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
+  databaseURL: "https://PASTE_PROJECT_ID-default-rtdb.firebaseio.com",
+  projectId: "PASTE_PROJECT_ID",
+  storageBucket: "PASTE_PROJECT_ID.firebasestorage.app",
+  messagingSenderId: "PASTE_SENDER_ID",
+  appId: "PASTE_APP_ID"
+};
+
+// Working name, shown in page titles and the sign-in screen.
+window.APP_NAME = "Live Requests";
+
+window.isFirebaseConfigured = function () {
+  return !!(window.FIREBASE_CONFIG && window.FIREBASE_CONFIG.apiKey && window.FIREBASE_CONFIG.apiKey.indexOf("PASTE") !== 0);
+};
+
+// Starter catalog, used to fill a new song list on first sign-in.
+window.STARTER_SONGS = [
+  {id:1,title:"I Will Survive",artist:"Gloria Gaynor",era:"70s",genre:"Soul"},
+  {id:2,title:"Dreams",artist:"Fleetwood Mac",era:"70s",genre:"Rock"},
+  {id:3,title:"Stand By Me",artist:"Ben E. King",era:"60s",genre:"Soul"},
+  {id:4,title:"Linger",artist:"The Cranberries",era:"90s",genre:"Rock"},
+  {id:5,title:"Yellow",artist:"Coldplay",era:"2000s",genre:"Pop"},
+  {id:6,title:"Kiss Me",artist:"Sixpence None the Richer",era:"90s",genre:"Pop"},
+  {id:7,title:"Iris",artist:"Goo Goo Dolls",era:"90s",genre:"Pop"},
+  {id:8,title:"Fade Into You",artist:"Mazzy Star",era:"90s",genre:"Rock"},
+  {id:9,title:"Tennessee Whiskey",artist:"Chris Stapleton",era:"2010s",genre:"Country"},
+  {id:10,title:"Landslide",artist:"Fleetwood Mac",era:"70s",genre:"Folk"},
+  {id:11,title:"Kryptonite",artist:"3 Doors Down",era:"2000s",genre:"Rock"},
+  {id:12,title:"No Rain",artist:"Blind Melon",era:"90s",genre:"Rock"},
+  {id:13,title:"Crazy",artist:"Gnarls Barkley",era:"2000s",genre:"Pop"},
+  {id:14,title:"Mr Brightside",artist:"The Killers",era:"2000s",genre:"Rock"},
+  {id:15,title:"Don't Let Me Down",artist:"The Beatles",era:"60s",genre:"Rock"},
+  {id:16,title:"Valerie",artist:"Amy Winehouse",era:"2000s",genre:"Soul"},
+  {id:17,title:"What's Up",artist:"4 Non Blondes",era:"90s",genre:"Rock"},
+  {id:18,title:"Creep",artist:"Radiohead",era:"90s",genre:"Rock"},
+  {id:19,title:"Burning Down The House",artist:"Talking Heads",era:"80s",genre:"Rock"},
+  {id:20,title:"Say It Ain't So",artist:"Weezer",era:"90s",genre:"Rock"},
+  {id:21,title:"Drive",artist:"Incubus",era:"2000s",genre:"Rock"},
+  {id:22,title:"Believe",artist:"Cher",era:"90s",genre:"Pop"},
+  {id:23,title:"Zombie",artist:"The Cranberries",era:"90s",genre:"Rock"},
+  {id:24,title:"Simple Man",artist:"Lynyrd Skynyrd",era:"70s",genre:"Rock"},
+  {id:25,title:"My Hero",artist:"Foo Fighters",era:"90s",genre:"Rock"},
+  {id:26,title:"Use Somebody",artist:"Kings of Leon",era:"2000s",genre:"Rock"},
+  {id:27,title:"Rock And Roll",artist:"Led Zeppelin",era:"70s",genre:"Rock"},
+  {id:28,title:"Toxic",artist:"Britney Spears",era:"2000s",genre:"Pop"},
+  {id:29,title:"Me And Bobby McGee",artist:"Janis Joplin",era:"70s",genre:"Folk"},
+  {id:30,title:"All Apologies",artist:"Nirvana",era:"90s",genre:"Rock"},
+  {id:31,title:"Sweet Child O Mine",artist:"Guns N' Roses",era:"80s",genre:"Rock"},
+  {id:32,title:"Superstition",artist:"Stevie Wonder",era:"70s",genre:"Soul"},
+  {id:33,title:"Black Hole Sun",artist:"Soundgarden",era:"90s",genre:"Rock"},
+  {id:34,title:"Better Man",artist:"Pearl Jam",era:"90s",genre:"Rock"},
+  {id:35,title:"Call Me The Breeze",artist:"Lynyrd Skynyrd",era:"70s",genre:"Rock"},
+  {id:36,title:"Can't You See",artist:"Marshall Tucker Band",era:"70s",genre:"Rock"},
+  {id:37,title:"Dear Mr Fantasy",artist:"Traffic",era:"60s",genre:"Rock"},
+  {id:38,title:"Espresso",artist:"Sabrina Carpenter",era:"2020s",genre:"Pop"},
+  {id:39,title:"Flowers",artist:"Miley Cyrus",era:"2020s",genre:"Pop"},
+  {id:40,title:"Magic Carpet Ride",artist:"Steppenwolf",era:"60s",genre:"Rock"},
+  {id:41,title:"Folsom Prison Blues",artist:"Johnny Cash",era:"60s",genre:"Country"},
+  {id:42,title:"Gunpowder And Lead",artist:"Miranda Lambert",era:"2000s",genre:"Country"},
+  {id:43,title:"Have You Ever Seen The Rain",artist:"Creedence Clearwater Revival",era:"70s",genre:"Rock"},
+  {id:44,title:"Hotel California",artist:"The Eagles",era:"70s",genre:"Rock"},
+  {id:45,title:"House Of The Rising Sun",artist:"The Animals",era:"60s",genre:"Rock"},
+  {id:46,title:"I Love Rock N Roll",artist:"Joan Jett",era:"80s",genre:"Rock"},
+  {id:47,title:"I Put A Spell On You",artist:"Nina Simone",era:"60s",genre:"Soul"},
+  {id:48,title:"I'm Like A Bird",artist:"Nelly Furtado",era:"2000s",genre:"Pop"},
+  {id:49,title:"Jolene",artist:"Dolly Parton",era:"70s",genre:"Country"},
+  {id:50,title:"Edge Of 17",artist:"Stevie Nicks",era:"80s",genre:"Rock"},
+  {id:51,title:"Mary Jane's Last Dance",artist:"Tom Petty",era:"90s",genre:"Rock"},
+  {id:52,title:"Free Fallin",artist:"Tom Petty",era:"80s",genre:"Rock"},
+  {id:53,title:"Pink Pony Club",artist:"Chappell Roan",era:"2020s",genre:"Pop"},
+  {id:54,title:"Roadhouse Blues",artist:"The Doors",era:"60s",genre:"Rock"},
+  {id:55,title:"Under The Bridge",artist:"Red Hot Chili Peppers",era:"90s",genre:"Rock"},
+  {id:56,title:"Witchy Woman",artist:"The Eagles",era:"70s",genre:"Rock"},
+  {id:57,title:"You Oughta Know",artist:"Alanis Morissette",era:"90s",genre:"Rock"},
+  {id:58,title:"Ain't No Sunshine",artist:"Bill Withers",era:"70s",genre:"Soul"},
+  {id:59,title:"Use Me",artist:"Bill Withers",era:"70s",genre:"Soul"},
+  {id:60,title:"Summertime",artist:"Nina Simone",era:"60s",genre:"Soul"},
+  {id:61,title:"Knockin' On Heaven's Door",artist:"Bob Dylan",era:"70s",genre:"Folk"},
+  {id:62,title:"Fast Car",artist:"Tracy Chapman",era:"80s",genre:"Folk"},
+  {id:63,title:"Horse With No Name",artist:"America",era:"70s",genre:"Folk"},
+  {id:64,title:"In Dreams",artist:"Sierra Ferrell",era:"2010s",genre:"Folk"},
+  {id:65,title:"Far Away Across The Sea",artist:"Sierra Ferrell",era:"2010s",genre:"Folk"},
+  {id:66,title:"The Sea",artist:"Sierra Ferrell",era:"2010s",genre:"Folk"},
+  {id:67,title:"All Along The Watchtower",artist:"Jimi Hendrix",era:"60s",genre:"Rock"},
+  {id:68,title:"Hey Joe",artist:"Jimi Hendrix",era:"60s",genre:"Rock"},
+  {id:69,title:"Billie Jean",artist:"Michael Jackson",era:"80s",genre:"Pop"},
+  {id:70,title:"Everybody Wants To Rule The World",artist:"Tears For Fears",era:"80s",genre:"Pop"},
+  {id:71,title:"Seven Nation Army",artist:"The White Stripes",era:"2000s",genre:"Rock"}
+];
+
+</script>
+<script>
+(function(){
+  if (window.firebase) return;
+  const KEY = 'liveRequestsDemoDB';
+  const now = Date.now();
+  const seed = () => ({
+    settings: { actName: 'The Late Shift', venue: 'Waterline Brewing', tipLink: 'https://venmo.com/' },
+    songs: window.STARTER_SONGS.map(s => ({...s, active: true})).concat([{id:72,title:"Don't Stop Believin'",artist:'Journey',era:'80s',genre:'Rock',active:false}]),
+    requests: {
+      queue: {
+        d1: { songId: 2, title: 'Dreams', artist: 'Fleetwood Mac', name: 'Sarah', ts: now - 600000 },
+        d2: { songId: 2, title: 'Dreams', artist: 'Fleetwood Mac', name: 'Marcus', ts: now - 500000 },
+        d3: { songId: 62, title: 'Fast Car', artist: 'Tracy Chapman', name: null, ts: now - 400000 },
+        d4: { songId: 31, title: "Sweet Child O Mine", artist: "Guns N' Roses", name: 'Mike', ts: now - 300000 }
+      },
+      played: { '18': { songId: 18, title: 'Creep', artist: 'Radiohead', ts: now - 900000 } }
+    },
+    requestHistory: {
+      sessions: { s1: { date: '2026-10-10', venue: 'Waterline Brewing', requestCount: 6, playedCount: 5 }, s2: { date: '2026-10-17', venue: 'Satellite Bar', requestCount: 4, playedCount: 3 } },
+      requests: {
+        h1:{songId:49,title:'Jolene',artist:'Dolly Parton',sessionId:'s1',name:'amy'}, h2:{songId:49,title:'Jolene',artist:'Dolly Parton',sessionId:'s2',name:'joe'},
+        h3:{songId:16,title:'Valerie',artist:'Amy Winehouse',sessionId:'s1'}, h4:{songId:2,title:'Dreams',artist:'Fleetwood Mac',sessionId:'s2'},
+        h5:{songId:9,title:'Tennessee Whiskey',artist:'Chris Stapleton',sessionId:'s1'}, h6:{songId:16,title:'Valerie',artist:'Amy Winehouse',sessionId:'s2'},
+        h7:{songId:55,title:'Under The Bridge',artist:'Red Hot Chili Peppers',sessionId:'s1'}, h8:{songId:58,title:"Ain't No Sunshine",artist:'Bill Withers',sessionId:'s1'},
+        h9:{songId:49,title:'Jolene',artist:'Dolly Parton',sessionId:'s1',name:'kate'}, h10:{songId:5,title:'Yellow',artist:'Coldplay',sessionId:'s2'}
+      },
+      plays: { p1:{songId:49,sessionId:'s1'}, p2:{songId:16,sessionId:'s1'} }
+    }
+  });
+  let store;
+  try { store = JSON.parse(localStorage.getItem(KEY)); } catch(e) {}
+  if (!store || typeof store !== 'object') store = seed();
+  const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch(e) {} };
+  persist();
+  window.__resetDemo = () => { try { localStorage.removeItem(KEY); } catch(e) {} location.reload(); };
+
+  const listeners = [];
+  let n = 0;
+  const split = p => String(p || '').split('/').filter(Boolean);
+  const getAt = p => { let o = store; for (const k of split(p)) { if (o == null || typeof o !== 'object') return null; o = o[k]; } return o === undefined ? null : o; };
+  const sv = v => { if (v && typeof v === 'object') { if (v['.sv'] === 'timestamp') return Date.now(); const o = Array.isArray(v) ? [] : {}; for (const k in v) o[k] = sv(v[k]); return o; } return v; };
+  const setAt = (p, v) => { const ks = split(p); if (!ks.length) { store = v || {}; return; } let o = store; for (let i = 0; i < ks.length - 1; i++) { if (o[ks[i]] == null || typeof o[ks[i]] !== 'object') o[ks[i]] = {}; o = o[ks[i]]; } const l = ks[ks.length-1]; if (v == null) delete o[l]; else o[l] = JSON.parse(JSON.stringify(v)); };
+  const snap = v => ({ val: () => v == null ? null : JSON.parse(JSON.stringify(v)), exists: () => v != null });
+  const fire = l => setTimeout(() => l.cb(snap(l.path === '.info/connected' ? true : getAt(l.path))), 0);
+  const notify = c => { c = split(c).join('/'); listeners.forEach(l => { const p = split(l.path).join('/'); if (p === '.info/connected') return; if (!c || !p || c === p || c.startsWith(p + '/') || p.startsWith(c + '/')) fire(l); }); };
+  window.addEventListener('storage', e => { if (e.key !== KEY) return; try { store = JSON.parse(e.newValue) || seed(); } catch(x) { store = seed(); } listeners.forEach(fire); });
+
+  function Ref(p){ this.path = p || ''; this.key = split(p).slice(-1)[0] || null; }
+  Ref.prototype.on = function(ev, cb){ const l = {path:this.path, cb}; listeners.push(l); fire(l); return cb; };
+  Ref.prototype.off = function(){};
+  Ref.prototype.once = function(){ return Promise.resolve(snap(getAt(this.path))); };
+  Ref.prototype.set = function(v){ setAt(this.path, sv(v)); persist(); notify(this.path); return Promise.resolve(); };
+  Ref.prototype.remove = function(){ return this.set(null); };
+  Ref.prototype.update = function(o){ const b = split(this.path); Object.entries(o).forEach(([k,v]) => setAt(b.concat(split(k)).join('/'), sv(v))); persist(); notify(this.path); Object.keys(o).forEach(k => notify(b.concat(split(k)).join('/'))); return Promise.resolve(); };
+  Ref.prototype.push = function(v){ const c = new Ref(split(this.path).concat(['-demo' + Date.now() + (++n)]).join('/')); if (v !== undefined) { const p = c.set(v); c.then = p.then.bind(p); } return c; };
+
+  let user = window.__DEMO_USER || null; const cbs = [];
+  const auth = {
+    get currentUser(){ return user; },
+    onAuthStateChanged(cb){ cbs.push(cb); setTimeout(() => cb(user), 0); return () => {}; },
+    getRedirectResult(){ return Promise.resolve({user:null}); },
+    signInWithPopup(){ user = {email:'you@example.com', isAnonymous:false}; cbs.forEach(c => c(user)); return Promise.resolve({user}); },
+    signInWithRedirect(){ return this.signInWithPopup(); },
+    signInAnonymously(){ if (!user) { user = {isAnonymous:true}; cbs.forEach(c => c(user)); } return Promise.resolve({user}); },
+    signOut(){ user = null; cbs.forEach(c => c(user)); return Promise.resolve(); }
+  };
+  const fb = { initializeApp(){ return {}; }, auth(){ return auth; }, database(){ return { ref: p => new Ref(p) }; } };
+  fb.auth.GoogleAuthProvider = function(){};
+  fb.database = Object.assign(fb.database, { ServerValue: { TIMESTAMP: {'.sv':'timestamp'} } });
+  window.firebase = fb;
+  // The preview frame can't show confirm() dialogs; the demo uses sample data, so confirm automatically.
+  window.confirm = () => true;
+})();
+</script>
+<style>
+.demo-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:10px max(16px, env(safe-area-inset-left, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));background:#2B2440;color:#E9E2F7;font:500 14px/1.3 'Bricolage Grotesque',system-ui,sans-serif;position:relative;z-index:70}
+.demo-bar b{font-weight:700;color:#FFF1D6}
+.demo-bar nav{display:flex;gap:12px;flex-wrap:wrap}
+.demo-bar a,.demo-bar button{color:#FFF1D6;background:none;border:none;font:inherit;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:2px 0}
+.demo-bar a[aria-current]{text-decoration:none;opacity:.6;pointer-events:none}
+.demo-note{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);background:#FFF1D6;color:#15131F;padding:12px 18px;border-radius:999px;font:600 15px/1.3 'Bricolage Grotesque',system-ui,sans-serif;z-index:80;max-width:calc(100% - 32px);text-align:center;opacity:0;transition:opacity .2s;pointer-events:none}
+.demo-note.show{opacity:1}
+</style>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  color-scheme:dark;
+  --house:#15131F;--surface:#1E1B2B;--raised:#29253A;--line:#383250;
+  --text:#F3EEE4;--muted:#A9A2BC;--spot:#FFF1D6;--gel:#FF6F96;
+}
+html,body{background:var(--house);color:var(--text);font-family:'Bricolage Grotesque',system-ui,sans-serif;font-variation-settings:"opsz" 14;min-height:100vh;min-height:100dvh;overscroll-behavior:none}
+:focus-visible{outline:2px solid var(--spot);outline-offset:3px}
+[hidden]{display:none!important}
+
+/* The spotlight: one warm cone of light falling on the act name. */
+.stage{position:relative;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 28px) 24px calc(env(safe-area-inset-bottom) + 28px);max-width:460px;margin:0 auto;overflow:hidden}
+.beam{position:absolute;left:50%;top:-12%;width:150%;height:78%;transform:translateX(-50%);pointer-events:none;
+  background:conic-gradient(from 0deg at 50% 0%,transparent 158deg,rgba(255,232,190,.16) 170deg,rgba(255,238,205,.30) 180deg,rgba(255,232,190,.16) 190deg,transparent 202deg);filter:blur(6px);
+  -webkit-mask-image:linear-gradient(to bottom,#000 30%,transparent 100%);mask-image:linear-gradient(to bottom,#000 30%,transparent 100%);
+  animation:lightsUp 1.4s ease-out both}
+.pool{position:absolute;left:50%;top:44%;width:120%;height:22%;transform:translate(-50%,-50%);pointer-events:none;background:radial-gradient(closest-side,rgba(255,226,170,.22),transparent);animation:lightsUp 1.4s ease-out both}
+@keyframes lightsUp{from{opacity:0}to{opacity:1}}
+
+.who{position:relative;flex:1;display:flex;flex-direction:column;justify-content:center;text-align:center;padding:40px 0 24px}
+.live{display:inline-flex;align-items:center;gap:8px;align-self:center;color:var(--muted);font-size:15px;margin-bottom:14px}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--gel);box-shadow:0 0 0 0 rgba(255,111,150,.6);animation:beat 2s ease-in-out infinite}
+@keyframes beat{0%{box-shadow:0 0 0 0 rgba(255,111,150,.55)}70%{box-shadow:0 0 0 10px rgba(255,111,150,0)}100%{box-shadow:0 0 0 0 rgba(255,111,150,0)}}
+.act{font-size:clamp(48px,15vw,76px);font-weight:800;font-variation-settings:"opsz" 96,"wdth" 75;line-height:.9;letter-spacing:-.015em;color:var(--spot);text-wrap:balance;overflow-wrap:anywhere}
+.venue{color:var(--muted);font-size:18px;margin-top:12px}
+
+.actions{position:relative;display:flex;flex-direction:column;gap:12px}
+.btn{display:flex;align-items:center;justify-content:space-between;gap:12px;text-decoration:none;border-radius:20px;padding:20px 22px;transition:transform .12s}
+.btn:active{transform:scale(.98)}
+.btn .l{font-size:22px;font-weight:700;font-variation-settings:"opsz" 32,"wdth" 85;line-height:1.1}
+.btn .s{font-size:15px;opacity:.75;margin-top:2px}
+.btn svg{flex-shrink:0}
+.btn-spot{background:var(--spot);color:var(--house)}
+.btn-ghost{background:var(--surface);color:var(--text);box-shadow:inset 0 0 0 1px var(--line)}
+
+.foot{position:relative;text-align:center;color:var(--muted);font-size:13px;margin-top:22px;opacity:.7}
+
+@media (prefers-reduced-motion:reduce){.beam,.pool,.live i{animation:none}}
+</style>
+</head>
+<body>
+<div class="demo-bar" role="note"><span><b>Demo</b> with sample data saved on this device only.</span><nav aria-label="Demo pages"><a href="../index.html">Stage view</a><a href="../qr/index.html" aria-current="page">Fan page</a><a href="../request/index.html">Song list</a><button type="button" onclick="window.__resetDemo()">Reset demo</button></nav></div><div class="demo-note" id="demo-note" role="status" aria-live="polite"></div><script>document.addEventListener("click",function(e){var a=e.target.closest("#tip,#sent-tip");if(!a)return;e.preventDefault();var n=document.getElementById("demo-note");n.textContent="In the live app, this opens your tip link.";n.classList.add("show");clearTimeout(n._h);n._h=setTimeout(function(){n.classList.remove("show")},2200);},true);</script>
+<div class="stage">
+  <div class="beam" aria-hidden="true"></div>
+  <div class="pool" aria-hidden="true"></div>
+
+  <div class="who">
+    <div class="live"><i></i>Live tonight</div>
+    <h1 class="act" id="act">Live music</h1>
+    <div class="venue" id="venue" hidden></div>
+  </div>
+
+  <nav class="actions">
+    <a class="btn btn-spot" href="../request/index.html">
+      <span><span class="l" style="display:block">Request a song</span><span class="s" style="display:block">See the set list and send one in</span></span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+    </a>
+    <a class="btn btn-ghost" id="tip" href="#" target="_blank" rel="noopener" hidden>
+      <span><span class="l" style="display:block" id="tip-label">Leave a tip</span><span class="s" style="display:block">Thanks for supporting live music</span></span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+    </a>
+  </nav>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+$('foot').textContent = 'Requests by ' + (window.APP_NAME || 'Live Requests');
+
+function tipLabel(url){
+  if (/venmo/i.test(url)) return 'Tip with Venmo';
+  if (/cash\.app|cashapp/i.test(url)) return 'Tip with Cash App';
+  if (/paypal/i.test(url)) return 'Tip with PayPal';
+  return 'Leave a tip';
+}
+
+if (window.isFirebaseConfigured()) {
+  firebase.initializeApp(window.FIREBASE_CONFIG);
+  firebase.database().ref('settings').on('value', s => {
+    const st = s.val() || {};
+    $('act').textContent = st.actName || 'Live music';
+    document.title = st.actName ? `${st.actName}, live tonight` : 'Live tonight';
+    $('venue').textContent = st.venue ? `at ${st.venue}` : '';
+    $('venue').hidden = !st.venue;
+    const tip = $('tip');
+    if (st.tipLink) { tip.href = st.tipLink; $('tip-label').textContent = tipLabel(st.tipLink); tip.hidden = false; }
+    else tip.hidden = true;
+  });
+}
+</script>
+</body>
+</html>
